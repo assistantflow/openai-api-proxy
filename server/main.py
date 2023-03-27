@@ -31,7 +31,7 @@ async def catch_exceptions(request: Request, call_next):
 
 # The OpenAI API as of March 27th, 2023.
 @app.api_route("/v1/models", methods=["GET", "OPTIONS"])
-@app.api_route("/v1/models/{model}", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/models/{model}", methods=["GET", "DELETE", "OPTIONS"])
 @app.api_route("/v1/completions", methods=["POST", "OPTIONS"])
 @app.api_route("/v1/chat/completions", methods=["POST", "OPTIONS"])
 @app.api_route("/v1/edits", methods=["POST", "OPTIONS"])
@@ -41,7 +41,16 @@ async def catch_exceptions(request: Request, call_next):
 @app.api_route("/v1/embeddings", methods=["POST", "OPTIONS"])
 @app.api_route("/v1/audio/transcriptions", methods=["POST", "OPTIONS"])
 @app.api_route("/v1/audio/translations", methods=["POST", "OPTIONS"])
-@app.api_route("/v1/files", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/files", methods=["GET", "POST", "OPTIONS"])
+@app.api_route("/v1/files/{file_id}", methods=["GET", "DELETE", "OPTIONS"])
+@app.api_route("/v1/files/{file_id}/content", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/fine-tunes", methods=["GET", "POST", "OPTIONS"])
+@app.api_route("/v1/fine-tunes/{fine_tune_id}", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/fine-tunes/{fine_tune_id}/cancel", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/fine-tunes/{fine_tune_id}/events", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/moderations", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/engines", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/engines/{engine_id}", methods=["GET", "OPTIONS"])
 async def proxy(req: Request) -> StreamingResponse:
     nh = req.headers.mutablecopy()
     nh["host"] = httpxClient._base_url.host
