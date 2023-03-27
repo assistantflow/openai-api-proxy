@@ -26,11 +26,22 @@ async def catch_exceptions(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception:
-        return JSONResponse(content={"message": f"request {httpxClient._base_url} failed"}, status_code=500)
+        return JSONResponse(content={"error": {"message": f"request {httpxClient._base_url} failed"}}, status_code=500)
 
 
-@app.api_route("/v1/completions", methods=["GET", "POST", "OPTIONS"])
-@app.api_route("/v1/chat/completions", methods=["GET", "POST", "OPTIONS"])
+# The OpenAI API as of March 27th, 2023.
+@app.api_route("/v1/models", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/models/{model}", methods=["GET", "OPTIONS"])
+@app.api_route("/v1/completions", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/chat/completions", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/edits", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/images/generations", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/images/edits", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/images/variations", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/embeddings", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/audio/transcriptions", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/audio/translations", methods=["POST", "OPTIONS"])
+@app.api_route("/v1/files", methods=["GET", "OPTIONS"])
 async def proxy(req: Request) -> StreamingResponse:
     nh = req.headers.mutablecopy()
     nh["host"] = httpxClient._base_url.host
