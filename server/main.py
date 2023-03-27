@@ -2,7 +2,7 @@ import click
 import httpx
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.background import BackgroundTasks
 
 
@@ -19,6 +19,14 @@ async def startup_event():
 @app.on_event("shutdown")
 async def shutdown_event():
     await httpxClient.aclose()
+
+
+@app.middleware("http")
+async def catch_exceptions(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception:
+        return JSONResponse(content={"message": f"request {httpxClient._base_url.host}"}, status_code=500)
 
 
 @app.api_route("/v1/completions", methods=["GET", "POST", "OPTIONS"])
