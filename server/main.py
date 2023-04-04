@@ -52,6 +52,7 @@ async def catch_exceptions(request: Request, call_next):
 @app.api_route("/v1/moderations", methods=["POST", "OPTIONS"])
 @app.api_route("/v1/engines", methods=["GET", "OPTIONS"])
 @app.api_route("/v1/engines/{engine_id}", methods=["GET", "OPTIONS"])
+@app.api_route("/dashboard/billing/usage", methods=["GET", "OPTIONS"])
 async def proxy(req: Request) -> StreamingResponse:
     nh = req.headers.mutablecopy()
     nh["host"] = httpxClient.base_url.host
