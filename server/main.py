@@ -2,9 +2,8 @@ import click
 import httpx
 import uvicorn
 from fastapi import FastAPI, Request
-from fastapi.responses import StreamingResponse, JSONResponse
 from fastapi.background import BackgroundTasks
-
+from fastapi.responses import JSONResponse, StreamingResponse
 
 app = FastAPI()
 httpxClient: httpx.AsyncClient = None
@@ -27,7 +26,7 @@ async def catch_exceptions(request: Request, call_next):
         return await call_next(request)
     except Exception as e:
         return JSONResponse(
-            content={"error": {"message": f"request {httpxClient._base_url} failed: {e}"}}, status_code=500
+            content={"error": {"message": f"request {httpxClient.base_url} failed: {e}"}}, status_code=500
         )
 
 
@@ -55,7 +54,7 @@ async def catch_exceptions(request: Request, call_next):
 @app.api_route("/v1/engines/{engine_id}", methods=["GET", "OPTIONS"])
 async def proxy(req: Request) -> StreamingResponse:
     nh = req.headers.mutablecopy()
-    nh["host"] = httpxClient._base_url.host
+    nh["host"] = httpxClient.base_url.host
     req._headers = nh
     req.scope.update(headers=req.headers.raw)
 
