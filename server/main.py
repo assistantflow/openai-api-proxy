@@ -76,4 +76,7 @@ async def proxy(req: Request) -> StreamingResponse:
 @click.option("--port", default=8000, help="the server port", show_default=True)
 @click.option("--reload", default=False, help="enable reload mode for development", show_default=True)
 def start(port: int, reload: bool):
+    from uvicorn.config import LOGGING_CONFIG
+
+    LOGGING_CONFIG["formatters"]["default"]["fmt"] = "%(asctime)s %(levelprefix)s %(message)s"
     uvicorn.run("server.main:app", host="0.0.0.0", port=port, reload=reload)
