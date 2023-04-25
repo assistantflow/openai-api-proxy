@@ -26,7 +26,7 @@ async def catch_exceptions(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception:
-        return JSONResponse(content={"message": f"request {httpxClient._base_url.host}"}, status_code=500)
+        return JSONResponse(content={"message": f"request {httpxClient._base_url} failed"}, status_code=500)
 
 
 @app.api_route("/v1/completions", methods=["GET", "POST", "OPTIONS"])
