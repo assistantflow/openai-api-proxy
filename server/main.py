@@ -25,8 +25,10 @@ async def shutdown_event():
 async def catch_exceptions(request: Request, call_next):
     try:
         return await call_next(request)
-    except Exception:
-        return JSONResponse(content={"error": {"message": f"request {httpxClient._base_url} failed"}}, status_code=500)
+    except Exception as e:
+        return JSONResponse(
+            content={"error": {"message": f"request {httpxClient._base_url} failed: {e}"}}, status_code=500
+        )
 
 
 # The OpenAI API as of March 27th, 2023.
