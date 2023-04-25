@@ -76,3 +76,12 @@ data: [DONE]
 ```
 
 Note: Please replace `[OPENAI_API_KEY]` with your actual OpenAI API key.
+
+## Deployment
+
+You can use a Docker image to deploy:
+
+```
+$ docker pull ghcr.io/assistantflow/openai-api-proxy:latest
+$ docker run -d --name aiproxy ghcr.io/assistantflow/openai-api-proxy:latest sh -c "uvicorn server.main:app --host 0.0.0.0 --port 8080" // default port is 8000, you can change it like this
+```
