@@ -22,6 +22,7 @@ start = "server.main:start"
 pre-commit = "^3.2.1"
 pytest = "^7.2.2"
 mypy = "^1.1.1"
+black = "^23.3.0"
 
 [tool.black]
 line-length = 119
